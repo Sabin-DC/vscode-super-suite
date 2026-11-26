@@ -1,0 +1,105 @@
+{
+  "viewsContainers": {
+    "activitybar": [
+      {
+        "id": "superSuiteFolderCompare",
+        "title": "Folder Compare",
+        "icon": "src/modules/folder-compare/media/icon.svg"
+      }
+    ]
+  },
+  "views": {
+    "superSuiteFolderCompare": [
+      {
+        "type": "webview",
+        "id": "superSuite.folderCompare.buttons",
+        "name": "Comparisons",
+        "when": "config.superSuite.folderCompare.enabled"
+      },
+      {
+        "id": "superSuite.folderCompare.results",
+        "name": "Results",
+        "when": "config.superSuite.folderCompare.enabled"
+      }
+    ]
+  },
+  "viewsWelcome": [
+    {
+      "view": "superSuite.folderCompare.results",
+      "contents": "No comparison has been run yet.\nClick one of your buttons above to compare its two folders."
+    }
+  ],
+  "commands": [
+    {
+      "command": "superSuite.folderCompare.clearResults",
+      "title": "Folder Compare: Clear Results",
+      "icon": "$(clear-all)"
+    },
+    {
+      "command": "superSuite.folderCompare.addToIgnore",
+      "title": "Add to Global Ignore List"
+    },
+    {
+      "command": "superSuite.folderCompare.openIgnoreFile",
+      "title": "Folder Compare: Edit Global Ignore List",
+      "icon": "$(edit)"
+    },
+    {
+      "command": "superSuite.folderCompare.focus",
+      "title": "Folder Compare: Show Comparisons"
+    }
+  ],
+  "menus": {
+    "view/item/context": [
+      {
+        "command": "superSuite.folderCompare.addToIgnore",
+        "when": "view == superSuite.folderCompare.results && viewItem == file",
+        "group": "ignore@1"
+      }
+    ],
+    "view/title": [
+      {
+        "command": "superSuite.folderCompare.openIgnoreFile",
+        "when": "view == superSuite.folderCompare.results",
+        "group": "navigation"
+      },
+      {
+        "command": "superSuite.folderCompare.clearResults",
+        "when": "view == superSuite.folderCompare.results",
+        "group": "navigation"
+      }
+    ],
+    "commandPalette": [
+      { "command": "superSuite.folderCompare.clearResults", "when": "config.superSuite.folderCompare.enabled" },
+      { "command": "superSuite.folderCompare.addToIgnore", "when": "false" },
+      { "command": "superSuite.folderCompare.openIgnoreFile", "when": "config.superSuite.folderCompare.enabled" },
+      { "command": "superSuite.folderCompare.focus", "when": "config.superSuite.folderCompare.enabled" }
+    ]
+  },
+  "configuration": {
+    "id": "superSuiteFolderCompare",
+    "title": "Super Suite: Folder Compare",
+    "order": 10,
+    "properties": {
+      "superSuite.folderCompare.enabled": {
+        "type": "boolean",
+        "default": true,
+        "order": 0,
+        "description": "Enable the Folder Compare module (sidebar buttons that compare two folders)."
+      },
+      "superSuite.folderCompare.ignore": {
+        "type": "array",
+        "items": { "type": "string" },
+        "default": [".git", "node_modules", ".DS_Store"],
+        "order": 1,
+        "description": "File or folder names skipped (at any depth) when comparing."
+      },
+      "superSuite.folderCompare.ignoreLineEndings": {
+        "type": "boolean",
+        "default": true,
+        "order": 2,
+        "description": "Treat text files as identical when they differ only by line endings (CRLF vs LF) or a UTF-8 BOM. Content is always compared; file dates and metadata never are."
+      }
+    }
+  }
+}

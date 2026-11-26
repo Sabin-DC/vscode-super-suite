@@ -1,0 +1,8 @@
+{
+  "commands": [
+    {
+      "command": "superSuite.manageModules",
+      "title": "Super Suite: Enable / Disable Modules..."
+    }
+  ]
+}

@@ -1,0 +1,222 @@
+{
+  "name": "vscode-super-suite",
+  "displayName": "Super Suite",
+  "description": "A suite of independent, individually toggleable VS Code tools in one extension.",
+  "version": "0.1.0",
+  "publisher": "local",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Sabin-DC/vscode-super-suite.git"
+  },
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "extensionKind": [
+    "ui",
+    "workspace"
+  ],
+  "main": "./extension.js",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "scripts": {
+    "build:manifest": "node scripts/build-manifest.js",
+    "test": "node --test \"test/*.test.js\""
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "superSuite.manageModules",
+        "title": "Super Suite: Enable / Disable Modules..."
+      },
+      {
+        "command": "superSuite.folderCompare.clearResults",
+        "title": "Folder Compare: Clear Results",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "superSuite.folderCompare.addToIgnore",
+        "title": "Add to Global Ignore List"
+      },
+      {
+        "command": "superSuite.folderCompare.openIgnoreFile",
+        "title": "Folder Compare: Edit Global Ignore List",
+        "icon": "$(edit)"
+      },
+      {
+        "command": "superSuite.folderCompare.focus",
+        "title": "Folder Compare: Show Comparisons"
+      },
+      {
+        "command": "superSuite.windowsContextMenu.show",
+        "title": "Windows Context Menu..."
+      },
+      {
+        "command": "superSuite.windowsContextMenu.showForActiveFile",
+        "title": "Windows Context Menu: Active File"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "superSuiteFolderCompare",
+          "title": "Folder Compare",
+          "icon": "src/modules/folder-compare/media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "superSuiteFolderCompare": [
+        {
+          "type": "webview",
+          "id": "superSuite.folderCompare.buttons",
+          "name": "Comparisons",
+          "when": "config.superSuite.folderCompare.enabled"
+        },
+        {
+          "id": "superSuite.folderCompare.results",
+          "name": "Results",
+          "when": "config.superSuite.folderCompare.enabled"
+        }
+      ]
+    },
+    "viewsWelcome": [
+      {
+        "view": "superSuite.folderCompare.results",
+        "contents": "No comparison has been run yet.\nClick one of your buttons above to compare its two folders."
+      }
+    ],
+    "menus": {
+      "view/item/context": [
+        {
+          "command": "superSuite.folderCompare.addToIgnore",
+          "when": "view == superSuite.folderCompare.results && viewItem == file",
+          "group": "ignore@1"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "superSuite.folderCompare.openIgnoreFile",
+          "when": "view == superSuite.folderCompare.results",
+          "group": "navigation"
+        },
+        {
+          "command": "superSuite.folderCompare.clearResults",
+          "when": "view == superSuite.folderCompare.results",
+          "group": "navigation"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "superSuite.folderCompare.clearResults",
+          "when": "config.superSuite.folderCompare.enabled"
+        },
+        {
+          "command": "superSuite.folderCompare.addToIgnore",
+          "when": "false"
+        },
+        {
+          "command": "superSuite.folderCompare.openIgnoreFile",
+          "when": "config.superSuite.folderCompare.enabled"
+        },
+        {
+          "command": "superSuite.folderCompare.focus",
+          "when": "config.superSuite.folderCompare.enabled"
+        },
+        {
+          "command": "superSuite.windowsContextMenu.show",
+          "when": "false"
+        },
+        {
+          "command": "superSuite.windowsContextMenu.showForActiveFile",
+          "when": "isWindows && config.superSuite.windowsContextMenu.enabled"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "superSuite.windowsContextMenu.show",
+          "when": "isWindows && config.superSuite.windowsContextMenu.enabled",
+          "group": "z_windows@1"
+        }
+      ],
+      "editor/title/context": [
+        {
+          "command": "superSuite.windowsContextMenu.show",
+          "when": "isWindows && config.superSuite.windowsContextMenu.enabled",
+          "group": "z_windows@1"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "superSuite.windowsContextMenu.show",
+          "when": "isWindows && config.superSuite.windowsContextMenu.enabled && resourceScheme == file",
+          "group": "z_windows@1"
+        }
+      ],
+      "scm/resourceState/context": [
+        {
+          "command": "superSuite.windowsContextMenu.show",
+          "when": "isWindows && config.superSuite.windowsContextMenu.enabled",
+          "group": "z_windows@1"
+        }
+      ]
+    },
+    "configuration": [
+      {
+        "id": "superSuiteFolderCompare",
+        "title": "Super Suite: Folder Compare",
+        "order": 10,
+        "properties": {
+          "superSuite.folderCompare.enabled": {
+            "type": "boolean",
+            "default": true,
+            "order": 0,
+            "description": "Enable the Folder Compare module (sidebar buttons that compare two folders)."
+          },
+          "superSuite.folderCompare.ignore": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": [
+              ".git",
+              "node_modules",
+              ".DS_Store"
+            ],
+            "order": 1,
+            "description": "File or folder names skipped (at any depth) when comparing."
+          },
+          "superSuite.folderCompare.ignoreLineEndings": {
+            "type": "boolean",
+            "default": true,
+            "order": 2,
+            "description": "Treat text files as identical when they differ only by line endings (CRLF vs LF) or a UTF-8 BOM. Content is always compared; file dates and metadata never are."
+          }
+        }
+      },
+      {
+        "id": "superSuiteWindowsContextMenu",
+        "title": "Super Suite: Windows Context Menu",
+        "order": 20,
+        "properties": {
+          "superSuite.windowsContextMenu.enabled": {
+            "type": "boolean",
+            "default": true,
+            "order": 0,
+            "description": "Enable the Windows Context Menu module (native Explorer menu for files and folders). Windows only."
+          },
+          "superSuite.windowsContextMenu.extendedItems": {
+            "type": "boolean",
+            "default": true,
+            "order": 1,
+            "description": "Include the extra entries Windows normally shows only with Shift held (Copy as path, Open PowerShell window here, etc.)."
+          }
+        }
+      }
+    ]
+  }
+}

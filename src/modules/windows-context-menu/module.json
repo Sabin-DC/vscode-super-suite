@@ -1,0 +1,49 @@
+{
+  "commands": [
+    {
+      "command": "superSuite.windowsContextMenu.show",
+      "title": "Windows Context Menu..."
+    },
+    {
+      "command": "superSuite.windowsContextMenu.showForActiveFile",
+      "title": "Windows Context Menu: Active File"
+    }
+  ],
+  "menus": {
+    "explorer/context": [
+      { "command": "superSuite.windowsContextMenu.show", "when": "isWindows && config.superSuite.windowsContextMenu.enabled", "group": "z_windows@1" }
+    ],
+    "editor/title/context": [
+      { "command": "superSuite.windowsContextMenu.show", "when": "isWindows && config.superSuite.windowsContextMenu.enabled", "group": "z_windows@1" }
+    ],
+    "editor/context": [
+      { "command": "superSuite.windowsContextMenu.show", "when": "isWindows && config.superSuite.windowsContextMenu.enabled && resourceScheme == file", "group": "z_windows@1" }
+    ],
+    "scm/resourceState/context": [
+      { "command": "superSuite.windowsContextMenu.show", "when": "isWindows && config.superSuite.windowsContextMenu.enabled", "group": "z_windows@1" }
+    ],
+    "commandPalette": [
+      { "command": "superSuite.windowsContextMenu.show", "when": "false" },
+      { "command": "superSuite.windowsContextMenu.showForActiveFile", "when": "isWindows && config.superSuite.windowsContextMenu.enabled" }
+    ]
+  },
+  "configuration": {
+    "id": "superSuiteWindowsContextMenu",
+    "title": "Super Suite: Windows Context Menu",
+    "order": 20,
+    "properties": {
+      "superSuite.windowsContextMenu.enabled": {
+        "type": "boolean",
+        "default": true,
+        "order": 0,
+        "description": "Enable the Windows Context Menu module (native Explorer menu for files and folders). Windows only."
+      },
+      "superSuite.windowsContextMenu.extendedItems": {
+        "type": "boolean",
+        "default": true,
+        "order": 1,
+        "description": "Include the extra entries Windows normally shows only with Shift held (Copy as path, Open PowerShell window here, etc.)."
+      }
+    }
+  }
+}
